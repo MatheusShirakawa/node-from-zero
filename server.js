@@ -13,10 +13,12 @@
 // // postgree
 // // fastify
 
-import { fastify } from "fastify"
-import { DatabaseMemory } from './database-memory.js'
-const server = fastify()
-const database = new DatabaseMemory()
+import { fastify } from "fastify";
+import { DatabaseMemory } from "./database-memory.js";
+import { DatabasePostgres } from "./database-postgres.js";
+const server = fastify();
+// const database = new DatabaseMemory();
+const database = new DatabasePostgres();
 // GET , POST, PUT, DELETE, PATCH,
 
 // post http://localhost:3333/videos
@@ -26,50 +28,49 @@ const database = new DatabaseMemory()
 
 // REQUEST BODY
 
-server.post('/videos', (request, reply) => {
-  const {title, description, duration} = request.body
+server.post("/videos", async (request, reply) => {
+    const { title, description, duration } = request.body;
 
-  database.create({
-    title,
-    description,
-    duration
-  })
+    await database.create({
+        title,
+        description,
+        duration,
+    });
 
-  console.log(title)
+    console.log(title);
 
-  return reply.status(201).send()
-})
+    return reply.status(201).send();
+});
 
-server.get('/videos', () => {
-    const videos = database.list()
-    console.log(videos)
-    return videos
-})
+server.get("/videos", async (request, reply) => {
+    const search = request.query.search;
+    console.log(search);
+    const videos = await database.list();
 
-server.put('/videos/:id', (request,reply) => {
-  const videoId = request.params.id
-  const {title, description, duration} = request.body
+    return videos;
+});
 
-  database.update(videoId, {
-    title,
-    description,
-    duration
-  })
+server.put("/videos/:id", async (request, reply) => {
+    const videoId = request.params.id;
+    const { title, description, duration } = request.body;
 
-  return reply.status(204).send()
-})
+    await database.update(videoId, {
+        title,
+        description,
+        duration,
+    });
 
-server.delete('/videos/:id', () => {
-  return 'Hello Node'
-})
+    return reply.status(204).send();
+});
+
+server.delete("/videos/:id", async (request, reply) => {
+    const videoId = request.params.id;
+
+    await database.delete(videoId);
+
+    return reply.status(204).send();
+});
 
 server.listen({
-  port:3333,
-})
-
-
-
-
-
-
-
+    port: 3333,
+});

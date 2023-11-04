@@ -13,7 +13,7 @@ GET http://localhost:3333/videos
 
 ###
 
-PUT http://localhost:3333/videos/b9388fd1-61bf-4b27-bd9b-56efbd6c04a3
+PUT http://localhost:3333/videos/d15d9fbe-2550-4727-97d7-33e10ca8a2f8
 Content-Type: application/json
 
 {
@@ -21,3 +21,7 @@ Content-Type: application/json
   "description":"Este é o video 02",
   "duration":180
 }
+
+###
+
+DELETE  http://localhost:3333/videos/7c1dbd77-634f-4832-a9c4-579812f7a411

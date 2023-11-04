@@ -1,40 +1,45 @@
 import { randomUUID } from "node:crypto";
 
-export class DatabaseMemory{
-  #videos = new Map();
+export class DatabaseMemory {
+    #videos = new Map();
 
-  list(){
-    console.log(this.#videos.entries())
-    return Array.from(this.#videos.entries()).map((videoArray)=> {
-      const id = videoArray[0]
-      const data = videoArray[1]
+    list(search) {
+        console.log(this.#videos.entries());
+        return Array.from(this.#videos.entries())
+            .map((videoArray) => {
+                const id = videoArray[0];
+                const data = videoArray[1];
 
-      return {
-        id,
-        ...data,
-      }
-    });
-  }
+                return {
+                    id,
+                    ...data,
+                };
+            })
+            .filter((video) => {
+                if (search) {
+                    return video.title.includes(search);
+                }
+                return true;
+            });
+    }
 
-  // Set, Map
+    // Set, Map
 
-  create(video){
-    const videoId = randomUUID()
-    console.log(videoId)
-    console.log(randomUUID())
+    create(video) {
+        const videoId = randomUUID();
+        console.log(videoId);
+        console.log(randomUUID());
 
-    // UUID - unic universe id
+        // UUID - unic universe id
 
-    this.#videos.set(videoId, video);
-  }
+        this.#videos.set(videoId, video);
+    }
 
-  update(id, video){
-    this.#videos.set(id, video);
-  }
+    update(id, video) {
+        this.#videos.set(id, video);
+    }
 
-  delete(id, video){
-    this.#videos.delete(id);
-  }
-
-
+    delete(id, video) {
+        this.#videos.delete(id);
+    }
 }
